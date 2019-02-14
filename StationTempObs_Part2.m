@@ -36,7 +36,6 @@ title('Locations of stations with observational temperature data')
 %change from RecentYear to present (i.e. the slope of the linear trendline)
 figure(2); clf
 worldmap('World')
-load coastlines
 plotm(coastlat, coastlon)
 scatterm(lat, lon, 100, P_recent(:,1), 'filled')
 title('Rate of Temperature Change from 1960 to Present')
@@ -60,22 +59,35 @@ colorbar
 %each station
 % Initialize arrays to hold all the output from the for loop you will write
 % below
-%<--
-
+baseline_model = NaN*zeros(length(sta), 2);
+tempAnnMeanAnomaly = NaN*zeros(length(sta),94);
+P = NaN*zeros(length(sta),2);
+%%
 % Write a for loop that will use the function StationModelProjections to
 % extract from the model projections for each station:
 % 1) the mean and standard deviation of the baseline period
 % (2006-2025) temperatures, 2) the annual mean temperature anomaly, and 3)
 % the slope and y-intercept of the linear trend over the 21st century
-%<--
-
+for i = 1:length(sta)
+    [baseline_model(i,:), tempAnnMeanAnomaly(i,:), P(i,:)] = StationModelProjections(sta(i));
+end
 %% Plot a global map of the rate of temperature change projected at each station over the 21st century
-%<--
+figure(3); clf
+worldmap('World')
+plotm(coastlat, coastlon)
+scatterm(lat, lon, 100, P(:,1), 'filled')
+title('Projected Rate of Temperature Change 2006-2099')
+colorbar()
 
 %% Plot a global map of the interannual variability in annual mean temperature at each station
 %as determined by the baseline standard deviation of the temperatures from
 %2005 to 2025
-%<--
+figure(4); clf
+worldmap('World')
+plotm(coastlat, coastlon)
+scatterm(lat, lon, 100, baseline_model(:,2), 'filled')
+title('Projected Interannual Variability 2006-2025')
+colorbar()
 
 %% Calculate the time of emergence of the long-term change in temperature from local variability
 %There are many ways to make this calcuation, but here we will compare the
@@ -87,7 +99,12 @@ colorbar
 %projections, calculated as the time (beginning from 2006) when the linear
 %temperature trend will have reached 2x the standard deviation of the
 %temperatures from the baseline period
-%<--
+years = 2006:2099;
+
+emergenceTime =  if P(:,1) >= 2*baseline_model(:,2)
+    
+% thoughts: tell it to output the year GIVEN that the std is at the
+% 2*2006std value, then make it loop and do that for every station
 
 %Plot a global map showing the year of emergence
 %<--
