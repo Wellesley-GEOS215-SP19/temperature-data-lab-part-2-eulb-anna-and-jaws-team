@@ -99,9 +99,24 @@ colorbar()
 %projections, calculated as the time (beginning from 2006) when the linear
 %temperature trend will have reached 2x the standard deviation of the
 %temperatures from the baseline period
-years = 2006:2099;
+emergencetime = NaN*zeros(18, 2)
 
-emergenceTime =  if P(:,1) >= 2*baseline_model(:,2)
+for i = 1:length(sta)
+    
+    filename = ['model' num2str(sta(i)) '.csv'];
+    stationdata = readtable(filename);
+    yearlist = stationdata.Year;
+    y = polyval(P(i,1), stationdata.Year) + P(i, 2)
+    
+    %newmatrix = NaN*zeros(length(stationdata.Year), 2)
+    %[newmatrix(:,1), newmatrix(:,2)] = [stationdata.Year, y]
+    
+    %if y >= 2*baseline_model(i ,2)
+       %emergencetime(i, :) = [stationdata.Year, y]
+    %end
+end
+
+%emergenceTime =  if P(:,1) >= 2*baseline_model(:,2)
     
 % thoughts: tell it to output the year GIVEN that the std is at the
 % 2*2006std value, then make it loop and do that for every station
