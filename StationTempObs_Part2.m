@@ -37,9 +37,10 @@ title('Locations of stations with observational temperature data');
 figure(2); clf
 worldmap('World');
 plotm(coastlat, coastlon);
-scatterm(lat, lon, 100, P_recent(:,1), 'filled');
+scatterm(lat, lon, 50, P_recent(:,1), 'filled');
 title('Rate of Temperature Change from 1960 to Present');
-colorbar;
+cmocean('thermal');
+colorbar();
 
 %Extension option: again using scatterm, plot the difference between the
 %local rate of temperature change (plotted above) and the global mean rate
@@ -51,9 +52,9 @@ Globalmeanrate = mean(P_recent(:,1));
 figure(3); clf
 worldmap('World');
 plotm(coastlat, coastlon);
-scatterm(lat, lon, 100, P_recent(:,1)-Globalmeanrate, 'filled');
+scatterm(lat, lon, 50, P_recent(:,1)-Globalmeanrate, 'filled');
 title('Difference Between Local and Global Rate of Change');
-cmocean('balance');
+cmocean('balance', 'pivot',0);
 colorbar;
 
 %% Now calculate the projected future rate of temperature change at each of these 18 stations
@@ -82,9 +83,10 @@ end
 figure(4); clf
 worldmap('World');
 plotm(coastlat, coastlon);
-scatterm(lat, lon, 100, P(:,1), 'filled');
-title('Projected Rate of Temperature Change 2006-2099');
-colorbar;
+scatterm(lat, lon, 50, P(:,1), 'filled');
+%title('Projected Rate of Temperature Change 2006-2099');
+cmocean('thermal');
+colorbar()
 
 %% Plot a global map of the interannual variability in annual mean temperature at each station
 %as determined by the baseline standard deviation of the temperatures from
@@ -92,9 +94,10 @@ colorbar;
 figure(5); clf
 worldmap('World');
 plotm(coastlat, coastlon);
-scatterm(lat, lon, 100, baseline_model(:,2), 'filled');
-title('Projected Interannual Variability 2006-2025');
-colorbar;
+scatterm(lat, lon, 50, baseline_model(:,2), 'filled');
+%title('Projected Interannual Variability 2006-2025');
+cmocean('thermal');
+colorbar();
 
 %% Calculate the time of emergence of the long-term change in temperature from local variability
 %There are many ways to make this calcuation, but here we will compare the
@@ -123,6 +126,7 @@ end
 figure(6); clf
 worldmap('World');
 plotm(coastlat, coastlon);
-scatterm(lat, lon, 100, emergencetime, 'filled');
-title('Year of Emergence');
+scatterm(lat, lon, 50, emergencetime, 'filled');
+%title('Year of Emergence');
+cmocean('solar', 'negative');
 colorbar;
